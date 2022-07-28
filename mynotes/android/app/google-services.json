@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "349924090454",
+    "project_id": "mynotesaca",
+    "storage_bucket": "mynotesaca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349924090454:android:9c10b227d1f5402bec51f7",
+        "android_client_info": {
+          "package_name": "com.praksa.mynotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "349924090454-g4s2d9teqo4osv4pi98kjfon546lv348.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaiMN0eXTd7579TU5ApVSYD1lWZAjS_gQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "349924090454-g4s2d9teqo4osv4pi98kjfon546lv348.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
