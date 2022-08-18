@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicfestivals/database/database_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,6 +50,34 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  final DatabaseService _database = DatabaseService();
+
+
+  @override
+  void initState() {
+    super.initState();
+    initDatabase();
+  }
+
+  Future<void> initDatabase() async {
+    await _database.open();
+    // var member = await _database.createMember(DatabaseMember(id: -1, bandId: 1, firstName: "Pera", lastName: "Peric", nickName: "Detilc"));
+    var member = await _database.getById(1);
+    print(member);
+    var member2 = await _database.updateMember(DatabaseMember(id: 1, bandId: member!.bandId, firstName: "Drugo ime", lastName: "Drugo Prezime", nickName: "Drugi nadimal"));
+    print(member2);
+    var member3 = await _database.getById(1);
+    print(member3);
+
+    var allMembers = await _database.getAll();
+    for (var element in allMembers) {print(element);}
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _database.close();
+  }
 
   void _incrementCounter() {
     setState(() {

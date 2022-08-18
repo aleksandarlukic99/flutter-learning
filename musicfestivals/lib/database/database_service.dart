@@ -7,9 +7,80 @@ import 'database_exceptions.dart';
 class DatabaseService {
   Database? _db;
 
-  Future<DatabaseMusicFestival> createFestival() async {
+  Future<DatabaseMember> createMember(DatabaseMember member) async {
     final db = _getDatabaseOrThrow();
+    int id = await db.insert("member", {
+      "band_id"	: member.bandId,
+      "firstname":	member.firstName,
+      "lastname":	member.lastName,
+      "nickname":	member.nickName,
+    });
+    return DatabaseMember(id: id, bandId: member.bandId, firstName: member.firstName, lastName: member.lastName, nickName: member.nickName);
   }
+
+
+  Future<DatabaseMember> updateMember(DatabaseMember member) async {
+    final db = _getDatabaseOrThrow();
+    db.update("member", {
+      "band_id"	: member.bandId,
+      "firstname":	member.firstName,
+      "lastname":	member.lastName,
+      "nickname":	member.nickName,
+    },
+      where: "id = ?",
+      whereArgs: [member.id]
+    );
+
+    return DatabaseMember(id: member.id, bandId: member.bandId, firstName: member.firstName, lastName: member.lastName, nickName: member.nickName);
+  }
+
+  Future<List<DatabaseMember>> getAll() async {
+    final db = _getDatabaseOrThrow();
+    List<Map<String, Object?>> members = await db.query("member",
+      columns: [
+        "id",
+        "band_id",
+        "firstname",
+        "lastname",
+        "nickname",
+      ],
+    );
+
+    return members.map((member) => DatabaseMember(
+        id: member["id"] as int,
+        bandId: member["band_id"] as int,
+        firstName: member["firstname"] as String,
+        lastName: member["lastname"] as String,
+        nickName: member["nickname"] as String
+    )).toList();
+  }
+
+  Future<DatabaseMember?> getById(int id) async {
+    final db = _getDatabaseOrThrow();
+    var queryResult = await db.query("member",
+      columns: [
+        "id",
+        "band_id",
+        "firstname",
+        "lastname",
+        "nickname",
+      ],
+      where: "id=?",
+      whereArgs: [id],
+    );
+    if(queryResult.isEmpty){
+      return null;
+    }
+    Map<String, Object?> member = queryResult.first;
+    return DatabaseMember(
+        id: member["id"] as int,
+        bandId: member["band_id"] as int,
+        firstName: member["firstname"] as String,
+        lastName: member["lastname"] as String,
+        nickName: member["nickname"] as String
+    );
+  }
+
 
   Future<void> deleteFestival(int id) async {
     final db = _getDatabaseOrThrow();
@@ -35,7 +106,7 @@ class DatabaseService {
     }
   }
 
-  Future<void> open() async {
+  Future<int> open() async {
     if (_db != null) {
       throw DatabaseAlreadyOpenException();
     }
@@ -44,6 +115,10 @@ class DatabaseService {
       final dbPath = join(docsPath.path, 'musicfestival.db');
       final db = await openDatabase(dbPath);
       _db = db;
+
+      if(await databaseExists((dbPath))){
+        return 1;
+      }
 
       //create music festival table
       await db.execute(createMusicFestivalTable);
@@ -59,6 +134,8 @@ class DatabaseService {
     } on MissingPlatformDirectoryException {
       throw UnableToGetDocumentsDirectory();
     }
+
+    return -1;
   }
 }
 
