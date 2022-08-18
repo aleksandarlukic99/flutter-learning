@@ -52,7 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   final DatabaseService _database = DatabaseService();
 
-
   @override
   void initState() {
     super.initState();
@@ -62,15 +61,22 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> initDatabase() async {
     await _database.open();
     // var member = await _database.createMember(DatabaseMember(id: -1, bandId: 1, firstName: "Pera", lastName: "Peric", nickName: "Detilc"));
-    var member = await _database.getById(1);
+    var member = await _database.getMemberById(1);
     print(member);
-    var member2 = await _database.updateMember(DatabaseMember(id: 1, bandId: member!.bandId, firstName: "Drugo ime", lastName: "Drugo Prezime", nickName: "Drugi nadimal"));
+    var member2 = await _database.updateMember(DatabaseMember(
+        id: 1,
+        bandId: member!.bandId,
+        firstName: "Drugo ime",
+        lastName: "Drugo Prezime",
+        nickName: "Drugi nadimal"));
     print(member2);
-    var member3 = await _database.getById(1);
+    var member3 = await _database.getMemberById(1);
     print(member3);
 
-    var allMembers = await _database.getAll();
-    for (var element in allMembers) {print(element);}
+    var allMembers = await _database.getAllMembers();
+    for (var element in allMembers) {
+      print(element);
+    }
   }
 
   @override
