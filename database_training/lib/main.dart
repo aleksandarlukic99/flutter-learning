@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:musicfestivals/database/database_service.dart';
-import 'package:sqflite/sqflite.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,26 +49,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  final DatabaseService _database = DatabaseService();
-
-  @override
-  void initState() {
-    super.initState();
-    initDatabase();
-  }
-
-  Future<void> initDatabase() async {
-    await _database.open();
-    // var member = await _database.createMember(DatabaseMember(id: -1, bandId: 1, firstName: "Pera", lastName: "Peric", nickName: "Detilc"));
-    //
-    print(await getDatabasesPath());
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _database.close();
-  }
 
   void _incrementCounter() {
     setState(() {
