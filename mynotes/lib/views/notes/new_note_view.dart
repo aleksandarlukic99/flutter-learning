@@ -6,7 +6,7 @@ class NewNoteView extends StatefulWidget {
   const NewNoteView({Key? key}) : super(key: key);
 
   @override
-  State<NewNoteView> createState() => _NewNoteViewState();
+  _NewNoteViewState createState() => _NewNoteViewState();
 }
 
 class _NewNoteViewState extends State<NewNoteView> {
@@ -19,6 +19,23 @@ class _NewNoteViewState extends State<NewNoteView> {
     _notesService = NotesService();
     _textController = TextEditingController();
     super.initState();
+  }
+
+  void _textControllerListener() async {
+    final note = _note;
+    if (note == null) {
+      return;
+    }
+    final text = _textController.text;
+    await _notesService.updateNote(
+      note: note,
+      text: text,
+    );
+  }
+
+  void _setupTextControllerListener() {
+    _textController.removeListener(_textControllerListener);
+    _textController.addListener(_textControllerListener);
   }
 
   Future<DatabaseNote> createNewNote() async {
@@ -43,22 +60,11 @@ class _NewNoteViewState extends State<NewNoteView> {
     final note = _note;
     final text = _textController.text;
     if (note != null && text.isNotEmpty) {
-      await _notesService.updateNote(note: note, text: text);
+      await _notesService.updateNote(
+        note: note,
+        text: text,
+      );
     }
-  }
-
-  void _textControllerListener() async {
-    final note = _note;
-    if (note == null) {
-      return;
-    }
-    final text = _textController.text;
-    await _notesService.updateNote(note: note, text: text);
-  }
-
-  void _setupTextContollerListener() {
-    _textController.removeListener(_textControllerListener);
-    _textController.addListener(_textControllerListener);
   }
 
   @override
@@ -72,27 +78,29 @@ class _NewNoteViewState extends State<NewNoteView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("New note"),
-        ),
-        body: FutureBuilder(
-          builder: ((context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                _note = snapshot.data as DatabaseNote;
-                _setupTextContollerListener();
-                return TextField(
-                  controller: _textController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  decoration:
-                      const InputDecoration(hintText: "Start typing your note"),
-                );
-              default:
-                return const CircularProgressIndicator();
-            }
-          }),
-          //future: ,
-        ));
+      appBar: AppBar(
+        title: const Text('New Note'),
+      ),
+      body: FutureBuilder(
+        future: createNewNote(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              _note = snapshot.data as DatabaseNote;
+              _setupTextControllerListener();
+              return TextField(
+                controller: _textController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: const InputDecoration(
+                  hintText: 'Start typing your note...',
+                ),
+              );
+            default:
+              return const CircularProgressIndicator();
+          }
+        },
+      ),
+    );
   }
 }

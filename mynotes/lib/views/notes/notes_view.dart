@@ -22,16 +22,10 @@ class _NotesViewState extends State<NotesView> {
   }
 
   @override
-  void dispose() {
-    _notesService.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Your Notes"),
+        title: const Text('Your Notes'),
         actions: [
           IconButton(
             onPressed: () {
@@ -46,16 +40,18 @@ class _NotesViewState extends State<NotesView> {
                   final shouldLogout = await showLogOutDialog(context);
                   if (shouldLogout) {
                     await AuthService.firebase().logOut();
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil(loginRoute, (_) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      loginRoute,
+                      (_) => false,
+                    );
                   }
               }
             },
             itemBuilder: (context) {
-              return [
-                const PopupMenuItem<MenuAction>(
+              return const [
+                PopupMenuItem<MenuAction>(
                   value: MenuAction.logout,
-                  child: Text("Log out"),
+                  child: Text('Log out'),
                 ),
               ];
             },
@@ -64,7 +60,7 @@ class _NotesViewState extends State<NotesView> {
       ),
       body: FutureBuilder(
         future: _notesService.getOrCreateUser(email: userEmail),
-        builder: ((context, snapshot) {
+        builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               return StreamBuilder(
@@ -73,7 +69,25 @@ class _NotesViewState extends State<NotesView> {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                     case ConnectionState.active:
-                      return const Text("Waiting for all notes");
+                      if (snapshot.hasData) {
+                        final allNotes = snapshot.data as List<DatabaseNote>;
+                        return ListView.builder(
+                          itemCount: allNotes.length,
+                          itemBuilder: (context, index) {
+                            final note = allNotes[index];
+                            return ListTile(
+                              title: Text(
+                                note.text,
+                                maxLines: 1,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
                     default:
                       return const CircularProgressIndicator();
                   }
@@ -82,7 +96,7 @@ class _NotesViewState extends State<NotesView> {
             default:
               return const CircularProgressIndicator();
           }
-        }),
+        },
       ),
     );
   }
