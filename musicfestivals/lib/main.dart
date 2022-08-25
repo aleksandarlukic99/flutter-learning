@@ -1,13 +1,55 @@
+
 import 'package:flutter/material.dart';
-import 'package:musicfestivals/database/database_service.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:realm/realm.dart';
+
+import 'index.dart';
 
 void main() {
-  runApp(const MyApp());
+  var config = Configuration.local([Festival.schema, Band.schema, Member.schema, Song.schema],
+    initialDataCallback: (realm) {
+      var s1 = realm.add(Song(Uuid.v4(), "Pesma1"));
+      var s2 = realm.add(Song(Uuid.v4(), "Pesma2"));
+      var s3 = realm.add(Song(Uuid.v4(), "Pesma3"));
+      var s4 = realm.add(Song(Uuid.v4(), "Pesma4"));
+      var s5 = realm.add(Song(Uuid.v4(), "Pesma5"));
+      var s6 = realm.add(Song(Uuid.v4(), "Pesma6"));
+      var s7 = realm.add(Song(Uuid.v4(), "Pesma7"));
+      var s8 = realm.add(Song(Uuid.v4(), "Pesma8"));
+      var s9 = realm.add(Song(Uuid.v4(), "Pesma9"));
+      var s10 = realm.add(Song(Uuid.v4(), "Pesma10"));
+      var s11 = realm.add(Song(Uuid.v4(), "Pesma11"));
+      var s12 = realm.add(Song(Uuid.v4(), "Pesma12"));
+
+      var m1 = realm.add(Member(Uuid.v4(), "Pera1", "Peric1"));
+      var m2 = realm.add(Member(Uuid.v4(), "Pera2", "Peric2"));
+      var m3 = realm.add(Member(Uuid.v4(), "Pera3", "Peric3"));
+      
+      var b1 = realm.add(Band(Uuid.v4(), "Bend 1", "Tip 1", members: [m1, m2, m3], songs: [s1, s2, s3]));
+      var b2 = realm.add(Band(Uuid.v4(), "Bend 2", "Tip 2", songs: [s4, s5]));
+      var b3 = realm.add(Band(Uuid.v4(), "Bend 3", "Tip 3", songs: [s6, s7]));
+      
+      realm.add(Festival(Uuid.v4(), "Festival 1", bands: [b1, b2]));
+      realm.add(Festival(Uuid.v4(), "Festival 2", bands: [b3]));
+    });
+  Realm realm = Realm(config);
+  runApp(
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<Realm>(
+          create: (context) {
+            return realm;
+          },
+        )
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
 
   // This widget is the root of your application.
   @override
@@ -51,25 +93,40 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  final DatabaseService _database = DatabaseService();
+
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     initDatabase();
   }
 
-  Future<void> initDatabase() async {
-    await _database.open();
-    // var member = await _database.createMember(DatabaseMember(id: -1, bandId: 1, firstName: "Pera", lastName: "Peric", nickName: "Detilc"));
-    //
-    print(await getDatabasesPath());
+  void initDatabase() {
+    var realm = RepositoryProvider.of<Realm>(context);
+    var results = realm.all<Band>();
+    for (var value in results) {
+      print(value.name);
+    }
+
+    var results2 = realm.all<Member>();
+    for (var value in results2) {
+      print("${value.firstName} ${value.lastName}");
+    }
+
+    var results3 = realm.all<Song>();
+    for (var value in results3) {
+      print(value.name);
+    }
+
+    var results4 = realm.all<Festival>();
+    for (var value in results4) {
+      print(value.name);
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
-    _database.close();
   }
 
   void _incrementCounter() {
