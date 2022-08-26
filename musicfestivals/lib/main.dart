@@ -109,42 +109,73 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+  var indexTab = 0;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
           length: 3,
+          initialIndex: 0,
           child: Scaffold(
-            appBar: AppBar(
-              title: Text(widget.title),
-              bottom: const TabBar(tabs: [
-                Tab(
-                  icon: Icon(Icons.library_music_rounded),
-                  text: "Festival",
-                ),
-                Tab(
-                  icon: Icon(Icons.people),
-                  text: "Band",
-                ),
-                Tab(
-                  icon: Icon(Icons.music_note),
-                  text: "Song",
-                ),
-              ]),
-            ),
-            body: const TabBarView(
-              children: [
-                FestivalWidget(),
-                BandWidget(),
-                SongWidget(),
-              ],
-            ),
-            floatingActionButton: FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: () {},
-            ),
-          )),
+              appBar: AppBar(
+                title: Text(widget.title),
+                bottom: TabBar(
+                    onTap: (index) {
+                      setState(() {
+                        indexTab = index;
+                      });
+                    },
+                    tabs: const [
+                      Tab(
+                        icon: Icon(Icons.library_music_rounded),
+                        text: "Festival",
+                      ),
+                      Tab(
+                        icon: Icon(Icons.people),
+                        text: "Band",
+                      ),
+                      Tab(
+                        icon: Icon(Icons.music_note),
+                        text: "Song",
+                      ),
+                    ]),
+              ),
+              body: const TabBarView(
+                children: [
+                  FestivalWidget(),
+                  BandWidget(),
+                  SongWidget(),
+                ],
+              ),
+              floatingActionButton: _bottomButtons())),
     );
+  }
+
+  Widget _bottomButtons() {
+    var realm = RepositoryProvider.of<Realm>(context);
+    if (indexTab == 0) {
+      return FloatingActionButton(
+        onPressed: () {
+          print("First button");
+        },
+        child: const Icon(Icons.add),
+      );
+    } else if (indexTab == 1) {
+      return FloatingActionButton(
+        onPressed: () {
+          print("Second button");
+        },
+        child: const Icon(Icons.add),
+      );
+    } else {
+      return FloatingActionButton(
+        onPressed: () {
+          print("Third button");
+        },
+        child: const Icon(Icons.add),
+      );
+    }
   }
 }
 
