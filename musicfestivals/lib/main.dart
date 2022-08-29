@@ -47,9 +47,14 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -171,7 +176,18 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       return FloatingActionButton(
         onPressed: () {
-          print("Third button");
+          setState(() {
+            realm.write(() => realm.add(Song(Uuid.v4(), "Pesma15")));
+            final songs = realm.all<Song>();
+            songs.changes.listen((changes) {
+              changes.inserted;
+              changes.modified;
+              changes.deleted;
+              changes.newModified;
+              changes.moved;
+              changes.results;
+            });
+          });
         },
         child: const Icon(Icons.add),
       );
@@ -179,9 +195,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class FestivalWidget extends StatelessWidget {
+class FestivalWidget extends StatefulWidget {
   const FestivalWidget({Key? key}) : super(key: key);
 
+  @override
+  State<FestivalWidget> createState() => _FestivalWidgetState();
+}
+
+class _FestivalWidgetState extends State<FestivalWidget> {
   @override
   Widget build(BuildContext context) {
     var realm = RepositoryProvider.of<Realm>(context);
@@ -199,9 +220,14 @@ class FestivalWidget extends StatelessWidget {
   }
 }
 
-class BandWidget extends StatelessWidget {
+class BandWidget extends StatefulWidget {
   const BandWidget({Key? key}) : super(key: key);
 
+  @override
+  State<BandWidget> createState() => _BandWidgetState();
+}
+
+class _BandWidgetState extends State<BandWidget> {
   @override
   Widget build(BuildContext context) {
     var realm = RepositoryProvider.of<Realm>(context);
@@ -219,9 +245,14 @@ class BandWidget extends StatelessWidget {
   }
 }
 
-class SongWidget extends StatelessWidget {
+class SongWidget extends StatefulWidget {
   const SongWidget({Key? key}) : super(key: key);
 
+  @override
+  State<SongWidget> createState() => _SongWidgetState();
+}
+
+class _SongWidgetState extends State<SongWidget> {
   @override
   Widget build(BuildContext context) {
     var realm = RepositoryProvider.of<Realm>(context);
