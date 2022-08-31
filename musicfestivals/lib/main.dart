@@ -1,9 +1,11 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:realm/realm.dart';
+import 'UI/band_widget.dart';
+import 'UI/fab_widget.dart';
+import 'UI/festival_widget.dart';
+import 'UI/song_widget.dart';
 import 'index.dart';
 
 void main() {
@@ -85,13 +87,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late StreamSubscription<RealmResultsChanges<Song>> _songsSubscription;
+  late StreamSubscription<RealmResultsChanges<Band>> _bandSubscription;
+  late StreamSubscription<RealmResultsChanges<Festival>> _festivalSubscription;
   List<Song> _songs = List.empty();
+  List<Band> _bands = List.empty();
+  List<Festival> _festivals = List.empty();
   var indexTab = 0;
-  
+
   @override
   void dispose() {
     super.dispose();
     _songsSubscription.cancel();
+    _bandSubscription.cancel();
+    _festivalSubscription.cancel();
   }
 
   @override
@@ -104,6 +112,24 @@ class _MyHomePageState extends State<MyHomePage> {
     _songsSubscription = realmSongs.changes.listen((changes) {
       setState(() {
         _songs = changes.results.toList();
+      });
+    });
+
+    RealmResults<Band> realmBands = realm.all<Band>();
+    _bands = realmBands.toList();
+
+    _bandSubscription = realmBands.changes.listen((changes) {
+      setState(() {
+        _bands = changes.results.toList();
+      });
+    });
+
+    RealmResults<Festival> realmFestival = realm.all<Festival>();
+    _festivals = realmFestival.toList();
+
+    _festivalSubscription = realmFestival.changes.listen((changes) {
+      setState(() {
+        _festivals = changes.results.toList();
       });
     });
   }
@@ -140,121 +166,12 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               body: TabBarView(
                 children: [
-                  const FestivalWidget(),
-                  const BandWidget(),
+                  FestivalWidget(festivals: _festivals),
+                  BandWidget(bands: _bands),
                   SongWidget(songs: _songs),
                 ],
               ),
               floatingActionButton: FabWidget(indexTab: indexTab))),
-    );
-  }
-}
-
-//funkcije koje vracaju wigete treba pretvoriti u widgete. Ako ima puno takvih funkcija uticu na performanse.
-class FabWidget extends StatefulWidget {
-  const FabWidget({
-    Key? key,
-    required this.indexTab,
-  }) : super(key: key);
-
-  final int indexTab;
-
-  @override
-  State<FabWidget> createState() => _FabWidgetState();
-}
-
-class _FabWidgetState extends State<FabWidget> {
-  @override
-  Widget build(BuildContext context) {
-    var realm = RepositoryProvider.of<Realm>(context);
-      return FloatingActionButton(
-        onPressed: () async {
-          if(widget.indexTab == 0){
-            print("First button");
-          } else if(widget.indexTab == 1){
-            print("Second button");
-          } else if(widget.indexTab == 2){
-            var r = Random();
-            var index = r.nextInt(10000);
-            realm.write(() => realm.add(Song(Uuid.v4(), "Pesma $index")));
-          }
-        },
-        child: const Icon(Icons.add),
-      );
-  }
-}
-
-class FestivalWidget extends StatefulWidget {
-  const FestivalWidget({Key? key}) : super(key: key);
-
-  @override
-  State<FestivalWidget> createState() => _FestivalWidgetState();
-}
-
-class _FestivalWidgetState extends State<FestivalWidget> {
-  @override
-  Widget build(BuildContext context) {
-    var realm = RepositoryProvider.of<Realm>(context);
-    var festivals = realm.all<Festival>();
-    return ListView.builder(
-      itemCount: festivals.length,
-      itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            title: Text(festivals[index].name),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class BandWidget extends StatefulWidget {
-  const BandWidget({Key? key}) : super(key: key);
-
-  @override
-  State<BandWidget> createState() => _BandWidgetState();
-}
-
-class _BandWidgetState extends State<BandWidget> {
-  @override
-  Widget build(BuildContext context) {
-    var realm = RepositoryProvider.of<Realm>(context);
-    var bands = realm.all<Band>();
-    return ListView.builder(
-      itemCount: bands.length,
-      itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            title: Text(bands[index].name),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class SongWidget extends StatefulWidget {
-  const SongWidget({Key? key, required this.songs}) : super(key: key);
-  final List<Song> songs;
-  @override
-  State<SongWidget> createState() => _SongWidgetState();
-}
-
-class _SongWidgetState extends State<SongWidget> {
-
-  @override
-  Widget build(BuildContext context) {
-
-    return ListView.builder(
-      itemCount: widget.songs.length,
-      itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            title: Text(widget.songs[index].name),
-          ),
-        );
-      },
     );
   }
 }
