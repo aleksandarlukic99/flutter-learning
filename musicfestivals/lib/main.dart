@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:realm/realm.dart';
-import 'UI/band_widget.dart';
-import 'UI/fab_widget.dart';
-import 'UI/festival_widget.dart';
-import 'UI/song_widget.dart';
+import 'UI/band-widget.dart';
+import 'UI/fab-widget.dart';
+import 'UI/festival-widget.dart';
+import 'UI/song-widget.dart';
 import 'index.dart';
 
 void main() {

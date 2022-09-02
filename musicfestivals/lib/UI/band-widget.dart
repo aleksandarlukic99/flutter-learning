@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicfestivals/UI/create-edit-bands-widget.dart';
 import '../data/db/database.dart';
 
 class BandWidget extends StatefulWidget {
@@ -18,6 +19,14 @@ class _BandWidgetState extends State<BandWidget> {
         return Card(
           child: ListTile(
             title: Text(widget.bands[index].name),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateEditBandWidget(
+                            oldBand: widget.bands[index],
+                          )));
+            },
           ),
         );
       },

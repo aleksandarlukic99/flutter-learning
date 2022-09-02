@@ -30,7 +30,7 @@ class _FabWidgetState extends State<FabWidget> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const CreateEditBandWidget()));
+                  builder: (context) => CreateEditBandWidget(oldBand: null)));
         } else if (widget.indexTab == 2) {
           var r = Random();
           var index = r.nextInt(10000);

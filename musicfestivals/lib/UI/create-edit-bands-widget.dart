@@ -5,7 +5,9 @@ import 'package:realm/realm.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class CreateEditBandWidget extends StatefulWidget {
-  const CreateEditBandWidget({Key? key}) : super(key: key);
+  const CreateEditBandWidget({Key? key, required this.oldBand})
+      : super(key: key);
+  final Band? oldBand;
 
   @override
   State<CreateEditBandWidget> createState() => _CreateEditBandWidgetState();
@@ -18,6 +20,10 @@ class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
   @override
   void initState() {
     _textController = TextEditingController();
+    if (widget.oldBand != null) {
+      _textController.text = widget.oldBand!.name;
+      selectedSongs = widget.oldBand!.songs;
+    }
     super.initState();
   }
 
@@ -37,10 +43,16 @@ class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
         actions: [
           IconButton(
               onPressed: () {
-                if (_textController.text.isNotEmpty) {
-                  realm.write(() => realm.add(Band(
-                      Uuid.v4(), _textController.text, "rok",
-                      songs: selectedSongs)));
+                var band = Band(Uuid.v4(), _textController.text, "rok",
+                    songs: selectedSongs);
+                if (_textController.text.isNotEmpty && widget.oldBand == null) {
+                  realm.write(() => realm.add(band));
+                  Navigator.pop(context);
+                } else if (_textController.text.isNotEmpty &&
+                    widget.oldBand != null) {
+                  realm.write(() {
+                    band.name = _textController.text;
+                  });
                   Navigator.pop(context);
                 }
               },
@@ -51,7 +63,9 @@ class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
         children: [
           TextField(
             controller: _textController,
-            decoration: const InputDecoration(hintText: "Add new band name"),
+            decoration: const InputDecoration(
+              hintText: "Add new band name",
+            ),
           ),
           MultiSelectDialogField<Song>(
             title: const Text("Songs"),
