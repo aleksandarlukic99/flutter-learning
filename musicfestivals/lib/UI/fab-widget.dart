@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musicfestivals/UI/add_bands_widget.dart';
+import 'package:musicfestivals/UI/create-edit-bands-widget.dart';
 import 'package:realm/realm.dart';
 import '../data/db/database.dart';
 
@@ -27,8 +27,10 @@ class _FabWidgetState extends State<FabWidget> {
         if (widget.indexTab == 0) {
           print("First button");
         } else if (widget.indexTab == 1) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AddBandWidget()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const CreateEditBandWidget()));
         } else if (widget.indexTab == 2) {
           var r = Random();
           var index = r.nextInt(10000);

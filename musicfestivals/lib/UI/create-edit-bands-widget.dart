@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musicfestivals/index.dart';
 import 'package:realm/realm.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-class AddBandWidget extends StatefulWidget {
-  const AddBandWidget({Key? key}) : super(key: key);
+class CreateEditBandWidget extends StatefulWidget {
+  const CreateEditBandWidget({Key? key}) : super(key: key);
 
   @override
-  State<AddBandWidget> createState() => _AddBandWidgetState();
+  State<CreateEditBandWidget> createState() => _CreateEditBandWidgetState();
 }
 
-class _AddBandWidgetState extends State<AddBandWidget> {
+class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
   late final TextEditingController _textController;
   List<Song> selectedSongs = [];
 
