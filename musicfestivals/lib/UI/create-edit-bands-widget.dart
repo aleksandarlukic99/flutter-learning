@@ -52,6 +52,8 @@ class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
                     widget.oldBand != null) {
                   realm.write(() {
                     widget.oldBand!.name = _textController.text;
+                    widget.oldBand!.songs.clear();
+                    widget.oldBand!.songs.addAll(selectedSongs);
                   });
                   Navigator.pop(context);
                 }
@@ -80,6 +82,7 @@ class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
             onConfirm: (values) {
               selectedSongs = values;
             },
+            initialValue: widget.oldBand != null ? widget.oldBand!.songs : [],
           )
         ],
       ),
