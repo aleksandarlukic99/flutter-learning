@@ -51,7 +51,7 @@ class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
                 } else if (_textController.text.isNotEmpty &&
                     widget.oldBand != null) {
                   realm.write(() {
-                    band.name = _textController.text;
+                    widget.oldBand!.name = _textController.text;
                   });
                   Navigator.pop(context);
                 }
