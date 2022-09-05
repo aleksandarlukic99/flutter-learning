@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musicfestivals/UI/create-edit-bands-widget.dart';
+import 'package:musicfestivals/ui/create-edit-bands-widget.dart';
 import 'package:realm/realm.dart';
 import '../data/db/database.dart';
 

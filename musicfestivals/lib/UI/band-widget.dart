@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musicfestivals/UI/create-edit-bands-widget.dart';
+import 'package:musicfestivals/ui/create-edit-bands-widget.dart';
 import '../data/db/database.dart';
 
 class BandWidget extends StatefulWidget {

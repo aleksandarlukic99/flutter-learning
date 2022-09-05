@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:realm/realm.dart';
-import 'UI/band-widget.dart';
-import 'UI/fab-widget.dart';
-import 'UI/festival-widget.dart';
-import 'UI/song-widget.dart';
+import 'ui/band-widget.dart';
+import 'ui/fab-widget.dart';
+import 'ui/festival-widget.dart';
+import 'ui/song-widget.dart';
 import 'index.dart';
 
 void main() {
@@ -112,6 +112,11 @@ class _MyHomePageState extends State<MyHomePage> {
     _songsSubscription = realmSongs.changes.listen((changes) {
       setState(() {
         _songs = changes.results.toList();
+        changes.inserted;
+        changes.modified;
+        changes.deleted;
+        changes.newModified;
+        changes.moved;
       });
     });
 
@@ -121,6 +126,11 @@ class _MyHomePageState extends State<MyHomePage> {
     _bandSubscription = realmBands.changes.listen((changes) {
       setState(() {
         _bands = changes.results.toList();
+        changes.inserted;
+        changes.modified;
+        changes.deleted;
+        changes.newModified;
+        changes.moved;
       });
     });
 
@@ -130,6 +140,11 @@ class _MyHomePageState extends State<MyHomePage> {
     _festivalSubscription = realmFestival.changes.listen((changes) {
       setState(() {
         _festivals = changes.results.toList();
+        changes.inserted;
+        changes.modified;
+        changes.deleted;
+        changes.newModified;
+        changes.moved;
       });
     });
   }
