@@ -1,7 +1,9 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musicfestivals/UI/create-edit-bands-widget.dart';
+import 'package:musicfestivals/ui/create-edit-bands-widget.dart';
+import 'package:musicfestivals/ui/create-edit-festival.dart';
+import 'package:musicfestivals/ui/create-edit-song.dart';
 import 'package:realm/realm.dart';
 import '../data/db/database.dart';
 
@@ -21,20 +23,24 @@ class FabWidget extends StatefulWidget {
 class _FabWidgetState extends State<FabWidget> {
   @override
   Widget build(BuildContext context) {
-    var realm = RepositoryProvider.of<Realm>(context);
     return FloatingActionButton(
       onPressed: () async {
         if (widget.indexTab == 0) {
-          print("First button");
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CreateEditFestival(oldFestival: null),
+              ));
         } else if (widget.indexTab == 1) {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => CreateEditBandWidget(oldBand: null)));
         } else if (widget.indexTab == 2) {
-          var r = Random();
-          var index = r.nextInt(10000);
-          realm.write(() => realm.add(Song(Uuid.v4(), "Pesma $index")));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CreateEditSong(oldSong: null)));
         }
       },
       child: const Icon(Icons.add),

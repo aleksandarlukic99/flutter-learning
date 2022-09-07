@@ -1,28 +1,27 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musicfestivals/index.dart';
-import 'package:realm/realm.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:musicfestivals/data/db/database.dart';
+import 'package:flutter/material.dart';
+import 'package:realm/realm.dart';
 
-class CreateEditBandWidget extends StatefulWidget {
-  const CreateEditBandWidget({Key? key, required this.oldBand})
-      : super(key: key);
-  final Band? oldBand;
+class CreateEditFestival extends StatefulWidget {
+  const CreateEditFestival({super.key, required this.oldFestival});
+  final Festival? oldFestival;
 
   @override
-  State<CreateEditBandWidget> createState() => _CreateEditBandWidgetState();
+  State<CreateEditFestival> createState() => _CreateEditFestivalState();
 }
 
-class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
+class _CreateEditFestivalState extends State<CreateEditFestival> {
   late final TextEditingController _textController;
-  List<Song> selectedSongs = [];
+  List<Band> selectedBands = [];
 
   @override
   void initState() {
     _textController = TextEditingController();
-    if (widget.oldBand != null) {
-      _textController.text = widget.oldBand!.name;
-      selectedSongs = widget.oldBand!.songs;
+    if (widget.oldFestival != null) {
+      _textController.text = widget.oldFestival!.name;
+      selectedBands = widget.oldFestival!.bands;
     }
     super.initState();
   }
@@ -36,24 +35,25 @@ class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
   @override
   Widget build(BuildContext context) {
     var realm = RepositoryProvider.of<Realm>(context);
-    var songs = realm.all<Song>();
+    var bands = realm.all<Band>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add/edit band"),
+        title: const Text("Add/edit festival"),
         actions: [
           IconButton(
               onPressed: () {
-                var band = Band(Uuid.v4(), _textController.text, "rok",
-                    songs: selectedSongs);
-                if (_textController.text.isNotEmpty && widget.oldBand == null) {
-                  realm.write(() => realm.add(band));
+                var festival = Festival(Uuid.v4(), _textController.text,
+                    bands: selectedBands);
+                if (_textController.text.isNotEmpty &&
+                    widget.oldFestival == null) {
+                  realm.write(() => realm.add(festival));
                   Navigator.pop(context);
                 } else if (_textController.text.isNotEmpty &&
-                    widget.oldBand != null) {
+                    widget.oldFestival != null) {
                   realm.write(() {
-                    widget.oldBand!.name = _textController.text;
-                    widget.oldBand!.songs.clear();
-                    widget.oldBand!.songs.addAll(selectedSongs);
+                    widget.oldFestival!.name = _textController.text;
+                    widget.oldFestival!.bands.clear();
+                    widget.oldFestival!.bands.addAll(selectedBands);
                   });
                   Navigator.pop(context);
                 }
@@ -69,7 +69,7 @@ class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
             child: TextField(
               controller: _textController,
               decoration: const InputDecoration(
-                hintText: "Add new band name",
+                hintText: "Add new festival name",
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8.0))),
               ),
@@ -78,13 +78,13 @@ class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
           Container(
             padding:
                 const EdgeInsets.symmetric(vertical: 15.0, horizontal: 16.0),
-            child: MultiSelectDialogField<Song>(
-              title: const Text("Songs"),
-              items: songs
-                  .map((song) => MultiSelectItem(song, song.name))
+            child: MultiSelectDialogField<Band>(
+              title: const Text("Bands"),
+              items: bands
+                  .map((band) => MultiSelectItem(band, band.name))
                   .toList(),
-              buttonText: const Text("Select songs"),
-              searchHint: "Choose song(s)",
+              buttonText: const Text("Select bands"),
+              searchHint: "Choose band(s)",
               buttonIcon: const Icon(Icons.expand_more),
               searchable: true,
               selectedColor: Colors.blue,
@@ -95,9 +95,10 @@ class _CreateEditBandWidgetState extends State<CreateEditBandWidget> {
                   borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                   border: Border.all(color: Colors.black, width: 1.0)),
               onConfirm: (values) {
-                selectedSongs = values;
+                selectedBands = values;
               },
-              initialValue: widget.oldBand != null ? widget.oldBand!.songs : [],
+              initialValue:
+                  widget.oldFestival != null ? widget.oldFestival!.bands : [],
             ),
           )
         ],
