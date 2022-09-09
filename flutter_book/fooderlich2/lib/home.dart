@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:fooderlich/card2.dart';
+
 import 'card1.dart';
+import 'card2.dart';
 import 'card3.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  const Home({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
-  static List<Widget> pages = [
+  static List<Widget> pages = <Widget>[
     const Card1(),
     const Card2(),
     const Card3(),
@@ -30,7 +31,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Fooderlich",
+          'Fooderlich',
           style: Theme.of(context).textTheme.headline6,
         ),
       ),
@@ -39,18 +40,18 @@ class _HomeState extends State<Home> {
         selectedItemColor: Theme.of(context).textSelectionTheme.selectionColor,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
+        items: <BottomNavigationBarItem>[
+          const BottomNavigationBarItem(
             icon: Icon(Icons.card_giftcard),
             label: 'Card',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.card_giftcard),
-            label: 'Card 2',
+            label: 'Card2',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.card_giftcard),
-            label: 'Card 3',
+            label: 'Card3',
           ),
         ],
       ),

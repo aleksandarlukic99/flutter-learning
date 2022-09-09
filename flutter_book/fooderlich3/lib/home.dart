@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fooderlich3/models/screens/explore_screen.dart';
+import 'package:fooderlich3/screens/explore_screen.dart';
+import 'package:fooderlich3/screens/recipes_screen.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class _HomeState extends State<Home> {
   static List<Widget> pages = <Widget>[
     ExploreScreen(),
     // TODO: Replace with RecipesScreen
-    Container(color: Colors.green),
+    RecipesScreen(),
     Container(color: Colors.blue),
   ];
 

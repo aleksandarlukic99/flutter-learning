@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'fooderlich_theme.dart';
 
 class Card3 extends StatelessWidget {
@@ -38,10 +39,10 @@ class Card3 extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "Recipe Trends",
+                    'Recipe Trends',
                     style: FooderlichTheme.darkTextTheme.headline2,
                   ),
-                  const SizedBox(height: 30)
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
@@ -49,37 +50,38 @@ class Card3 extends StatelessWidget {
               child: Wrap(
                 alignment: WrapAlignment.start,
                 spacing: 12,
+                runSpacing: 12,
                 children: [
                   Chip(
                     label: Text(
-                      "Healthy",
+                      'Healthy',
                       style: FooderlichTheme.darkTextTheme.bodyText1,
                     ),
                     backgroundColor: Colors.black.withOpacity(0.7),
                     onDeleted: () {
-                      print("Delete");
+                      print('delete');
                     },
                   ),
                   Chip(
                     label: Text(
-                      "Vegan",
+                      'Vegan',
                       style: FooderlichTheme.darkTextTheme.bodyText1,
                     ),
                     backgroundColor: Colors.black.withOpacity(0.7),
                     onDeleted: () {
-                      print("Delete");
+                      print('delete');
                     },
                   ),
                   Chip(
                     label: Text(
-                      "Carrot",
+                      'Carrots',
                       style: FooderlichTheme.darkTextTheme.bodyText1,
                     ),
                     backgroundColor: Colors.black.withOpacity(0.7),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
