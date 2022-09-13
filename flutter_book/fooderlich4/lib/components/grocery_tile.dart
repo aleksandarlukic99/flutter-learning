@@ -19,41 +19,43 @@ class GroceryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 100,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(width: 5, color: item.color),
-            const SizedBox(width: 16),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.name,
-                  style: GoogleFonts.lato(
-                      decoration: textDecoration,
-                      fontSize: 21,
-                      fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 4),
-                buildDate(),
-                const SizedBox(height: 4),
-                buildImportance(),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  item.quantity.toString(),
-                  style: GoogleFonts.lato(
-                      decoration: textDecoration, fontSize: 21),
-                ),
-                buildCheckbox(),
-              ],
-            )
-          ],
-        ));
+      height: 100,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(width: 5, color: item.color),
+          const SizedBox(width: 16),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.name,
+                style: GoogleFonts.lato(
+                    decoration: textDecoration,
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              buildDate(),
+              const SizedBox(height: 4),
+              buildImportance(),
+            ],
+          ),
+          const SizedBox(width: 120),
+          Row(
+            children: [
+              Text(
+                item.quantity.toString(),
+                style:
+                    GoogleFonts.lato(decoration: textDecoration, fontSize: 21),
+              ),
+              buildCheckbox(),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   Widget buildImportance() {
