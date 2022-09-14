@@ -93,6 +93,4 @@ class GroceryTile extends StatelessWidget {
   Widget buildCheckbox() {
     return Checkbox(value: item.isComplete, onChanged: onComplete);
   }
-
-  //TODO: FIX BUG WITH CARD
 }
